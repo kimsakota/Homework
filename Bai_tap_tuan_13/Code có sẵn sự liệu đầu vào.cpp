@@ -4,7 +4,7 @@
 //               (˚ˎ 。7      ⋆
 //                | 、˜〵
 //                じしˍ, )ノ
-               
+// Code không được xịn xò, upgrade in the next version =))        
 #include <iostream> 
 #include <string>
 #include <vector>
