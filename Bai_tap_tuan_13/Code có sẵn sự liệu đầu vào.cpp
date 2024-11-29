@@ -4,10 +4,11 @@
 //               (˚ˎ 。7      ⋆
 //                | 、˜〵
 //                じしˍ, )ノ
-// Code không được xịn xò, upgrade in the next version =))        
+               
 #include <iostream> 
 #include <string>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 #define TVALUE Product
@@ -26,6 +27,7 @@ struct node {
     TVALUE value;
     node* left;
     node* right;
+    int doanhthu;
 };
 typedef node root;
 
@@ -33,6 +35,7 @@ root* create(TVALUE value) {
     root* T = new root;
     T->left = T->right = NULL;
     T->value = value;
+    T->doanhthu = 0;
     return T;
 }
 
@@ -62,12 +65,25 @@ int find_price(root* T, pair<int, int> v) {
     }
 }
 
-void print_tree(root* T) {
-    if ((T) != NULL) {
-        cout << "ID: " << T->value.ID << " | Ten san pham:" << T->value.name << " | So luong ban duoc: " << T->value.quanitity_sold << endl;
-        print_tree((T)->left);
-        print_tree((T)->right);
+void print_tree(root* root) {
+    //Phần này em có dùng chat GPT :))
+    if (!root) return;
+
+    print_tree(root->left);
+    static bool headerPrinted = false;
+    if (!headerPrinted) {
+        cout << left << setw(10) << "ID"
+            << setw(20) << "Name"
+            << setw(15) << "Price (VND)"
+            << setw(15) << "Sold Quantity" << endl;
+        cout << string(60, '-') << endl;
+        headerPrinted = true;
     }
+    cout << left << setw(10) << root->value.ID
+        << setw(20) << root->value.name
+        << setw(15) << root->value.price
+        << setw(15) << root->value.quanitity_sold << endl;
+    print_tree(root->right);
 }
 
 // Tạo hàng khách đang đợi thanh toán 
@@ -75,13 +91,11 @@ struct Queue {
     TVALUE2 data[MAX_SIZE];
     int front;
     int rear;
-    int doanhthu;
 };
 
 Queue* create_queue() {
     Queue* q = new Queue;
     q->front = q->rear = -1;
-    q->doanhthu = 0;
     return q;
 }
 
@@ -120,7 +134,7 @@ void ThanhToan(root*T, Queue* &q) {
             tongtien += (x.second * find_price(T, x));
         q->data[i].clear();
     }
-    q->doanhthu = tongtien;
+    T->doanhthu = tongtien;
 }
 int main() {
     root* T = NULL;
@@ -151,7 +165,7 @@ int main() {
     for (int i = 0; i < size_products; i++)
         insert(T, products[i]);
     
-    vector<vector<pair<int, int>>> v = {
+    vector<TVALUE2> v = {
         { {1, 2}, {3, 4}, {5, 6} },
         { {7, 8}, {9, 10} },
         { {11, 1}, {12, 2}, {13, 3} },
@@ -168,6 +182,6 @@ int main() {
         enqueue(Q, x);
     ThanhToan(T, Q);
     print_tree(T);
-    cout << "Doanh thu: " << Q->doanhthu << " VND";
+    cout << "\nDoanh thu: " << T->doanhthu; 
 
 }
