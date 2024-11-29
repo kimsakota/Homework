@@ -129,10 +129,12 @@ void check(root* T, Queue* &q, TVALUE2 info) {
 }
 void ThanhToan(root*T, Queue* &q) {
     int tongtien = 0;
-    for (int i = 0; i <= q->rear; i++) {
+    int n = q->rear;
+    for (int i = 0; i <= n; i++) {
         for (auto x : q->data[i]) 
             tongtien += (x.second * find_price(T, x));
         q->data[i].clear();
+        q->rear--;
     }
     T->doanhthu = tongtien;
 }
