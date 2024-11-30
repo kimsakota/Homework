@@ -26,15 +26,14 @@ struct node {
     TVALUE value;
     node* left;
     node* right;
-    int doanhthu;
 };
 typedef node root;
 
+int doanhthu = 0;
 root* create(TVALUE value) {
     root* T = new root;
     T->left = T->right = NULL;
     T->value = value;
-    T->doanhthu = 0;
     return T;
 }
 
@@ -132,7 +131,7 @@ void Chon_SP(root* &T, SC* &sc) {
             cout << "San pham khong ton tai!\n";
             continue;
         }
-        T->doanhthu += (v.price * quanitity);
+        doanhthu += (v.price * quanitity);
         v.quanitity = quanitity;
         enqueue(sc, v);
     }
@@ -150,13 +149,13 @@ void InHoaDon(SC* sc) {
             << setw(15) << sc->data[i].price
             << setw(15) << sc->data[i].quanitity << endl;
     }
-    cout << "Tong tien: " << sc->tongtien << endl;
+    cout << string(34, ' ') << "Tong tien: " << sc->tongtien << endl;
     cout << string(60, '-') << endl;
 }
 
 void ThongKe(root* T) {
     print_tree(T);
-    cout << "Doanh thu: " << T->doanhthu << endl;
+    cout << string(34, ' ') << "Doanh thu: " << doanhthu << endl;
 }
 
 void ThemSPMoi(root*& T, int& size_products) {
@@ -217,7 +216,7 @@ int main() {
         case 2: InHoaDon(sc); continue;
         case 3: ThongKe(T); continue;
         case 4: ThemSPMoi(T, size_products); continue;
-        case 5: break;
+        case 5: return 0;
         default:
             break;
         }
