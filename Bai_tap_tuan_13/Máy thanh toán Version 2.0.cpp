@@ -22,65 +22,47 @@ struct Product {
     int quanitity = 0;
 };
 
-struct node {
-    TVALUE value;
-    node* left;
-    node* right;
+vector<Product> products= {
+        {36001, "Apple", 15000},
+        {36002, "Banana", 10000},
+        {36003, "Milk", 25000},
+        {36004, "Bread", 20000},
+        {36005, "Cheese", 50000},
+        {36006, "Orange", 12000},
+        {36007, "Tomato", 8000},
+        {36008, "Potato", 7000},
+        {36009, "Egg", 3000},
+        {36010, "Chicken", 120000},
+        {36011, "Fish", 150000},
+        {36012, "Rice", 18000},
+        {36013, "Oil", 50000},
+        {36014, "Salt", 6000},
+        {36015, "Sugar", 10000},
+        {36016, "Coffee", 70000},
+        {36017, "Tea", 40000},
+        {36018, "Chocolate", 30000},
+        {36019, "Soap", 15000},
+        {36020, "Shampoo", 80000}
 };
-typedef node root;
-
+int size_products = products.size();
 int doanhthu = 0;
-root* create(TVALUE value) {
-    root* T = new root;
-    T->left = T->right = NULL;
-    T->value = value;
-    return T;
-}
 
-void insert(root* &T, TVALUE value) {
-    if ((T) == NULL)
-        (T) = create(value);
-    else {
-        if (T->value.ID > value.ID)
-            insert((T)->left, value);
-        else 
-            insert(T->right, value);
+Product find_price(int id, int quanitity) {
+    int first = 0, last = size_products - 1;
+    while (first <= last) {
+        int mid = (first + last) / 2;
+        if (products[mid].ID == id) {
+            products[mid].quanitity += quanitity;
+            return products[mid];
+        }
+        else if (products[mid].ID > id) {
+            last = mid - 1;
+        }
+        else {
+            first = mid + 1;
+        }
     }
-}
-
-TVALUE find_price(root* &T, int ID, int quanitity) {
-    if (T == NULL)
-        return { -1, "False", 0, 0 };
-    else {
-        if (T->value.ID == ID){
-            T->value.quanitity += quanitity;
-            return T->value;
-        }   
-        if (T->value.ID > ID)
-            return find_price(T->left, ID, quanitity);
-        else 
-            return find_price(T->right, ID, quanitity);
-    }
-}
-
-void print_tree(root* root) {
-    if (!root) return;
-
-    print_tree(root->left);
-    static bool headerPrinted = false;
-    if (!headerPrinted) {
-        cout << left << setw(10) << "ID"
-            << setw(20) << "Name"
-            << setw(15) << "Price (VND)"
-            << setw(15) << "Sold Quantity" << endl;
-        cout << string(60, '-') << endl;
-        headerPrinted = true;
-    }
-    cout << left << setw(10) << root->value.ID
-        << setw(20) << root->value.name
-        << setw(15) << root->value.price
-        << setw(15) << root->value.quanitity << endl;
-    print_tree(root->right);
+    return { -1, "False", 0, 0 };
 }
 
 // Thanh toán giỏ hàng
@@ -119,14 +101,14 @@ void enqueue(SC* q, TVALUE v) {
 }
 
 // Thanh toán sản phẩm 
-void Chon_SP(root* &T, SC* &sc) {
+void Chon_SP(SC*& sc) {
     
     while (true) {
         int ID, quanitity;
         cout << "Nhap ID: "; cin >> ID;
         if (ID == 0) break;
         cout << "\Nhap so luong: "; cin >> quanitity;
-        TVALUE v = find_price(T, ID, quanitity);
+        TVALUE v = find_price(ID, quanitity);
         if (v.ID == -1) {
             cout << "San pham khong ton tai!\n";
             continue;
@@ -153,17 +135,28 @@ void InHoaDon(SC* sc) {
     cout << string(60, '-') << endl;
 }
 
-void ThongKe(root* T) {
-    print_tree(T);
+void ThongKe() {
+    cout << left << setw(10) << "ID"
+        << setw(20) << "Name"
+        << setw(15) << "Price (VND)"
+        << setw(15) << "Sold Quantity" << endl;
+    cout << string(60, '-') << endl;
+    for (int i = 0; i < size_products; i++) {
+        cout << left << setw(10) << products[i].ID
+            << setw(20) << products[i].name
+            << setw(15) << products[i].price
+            << setw(15) << products[i].quanitity << endl;
+    }
     cout << string(34, ' ') << "Doanh thu: " << doanhthu << endl;
 }
 
-void ThemSPMoi(root*& T, int& size_products) {
+void ThemSPMoi() {
     TVALUE v;
     cout << "Nhap ten san pham: "; cin.ignore(); getline(cin, v.name);
     cout << "Nhap gia san pham: "; cin >> v.price;
-    v.ID = ++size_products;
-    insert(T, v);
+    v.ID = (products[size_products - 1].ID + 1);
+    products.push_back(v);
+    ++size_products;
 }
 int Menu() {
     int a;
@@ -179,43 +172,15 @@ int Menu() {
 }
 
 int main() {
-    root* T = NULL;
-    Product products[] = {
-        {1, "Apple", 15000},
-        {2, "Banana", 10000},
-        {3, "Milk", 25000},
-        {4, "Bread", 20000},
-        {5, "Cheese", 50000},
-        {6, "Orange", 12000},
-        {7, "Tomato", 8000},
-        {8, "Potato", 7000},
-        {9, "Egg", 3000},
-        {10, "Chicken", 120000},
-        {11, "Fish", 150000},
-        {12, "Rice", 18000},
-        {13, "Oil", 50000},
-        {14, "Salt", 6000},
-        {15, "Sugar", 10000},
-        {16, "Coffee", 70000},
-        {17, "Tea", 40000},
-        {18, "Chocolate", 30000},
-        {19, "Soap", 15000},
-        {20, "Shampoo", 80000}
-    };
-    int size_products = sizeof(products) / sizeof(products[0]);
-    for (int i = 0; i < size_products; i++)
-        insert(T, products[i]);
-    //print_tree(T);
-    
     Shopping_Cart* sc = create_queue();
 
     while (1) {
         switch (Menu()) 
         {
-        case 1: Chon_SP(T, sc); continue;
+        case 1: Chon_SP(sc); continue;
         case 2: InHoaDon(sc); continue;
-        case 3: ThongKe(T); continue;
-        case 4: ThemSPMoi(T, size_products); continue;
+        case 3: ThongKe(); continue;
+        case 4: ThemSPMoi(); continue;
         case 5: return 0;
         default:
             break;
