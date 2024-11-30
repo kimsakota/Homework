@@ -55,12 +55,10 @@ Product find_price(int id, int quanitity) {
             products[mid].quanitity += quanitity;
             return products[mid];
         }
-        else if (products[mid].ID > id) {
+        else if (products[mid].ID > id) 
             last = mid - 1;
-        }
-        else {
+        else 
             first = mid + 1;
-        }
     }
     return { -1, "False", 0, 0 };
 }
