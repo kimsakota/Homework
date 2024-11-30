@@ -23,26 +23,26 @@ struct Product {
 };
 
 vector<Product> products= {
-        {36001, "Apple", 15000},
-        {36002, "Banana", 10000},
-        {36003, "Milk", 25000},
-        {36004, "Bread", 20000},
-        {36005, "Cheese", 50000},
-        {36006, "Orange", 12000},
-        {36007, "Tomato", 8000},
-        {36008, "Potato", 7000},
-        {36009, "Egg", 3000},
-        {36010, "Chicken", 120000},
-        {36011, "Fish", 150000},
-        {36012, "Rice", 18000},
-        {36013, "Oil", 50000},
-        {36014, "Salt", 6000},
-        {36015, "Sugar", 10000},
-        {36016, "Coffee", 70000},
-        {36017, "Tea", 40000},
-        {36018, "Chocolate", 30000},
-        {36019, "Soap", 15000},
-        {36020, "Shampoo", 80000}
+        {1, "Apple", 15000},
+        {2, "Banana", 10000},
+        {3, "Milk", 25000},
+        {4, "Bread", 20000},
+        {5, "Cheese", 50000},
+        {6, "Orange", 12000},
+        {7, "Tomato", 8000},
+        {8, "Potato", 7000},
+        {9, "Egg", 3000},
+        {10, "Chicken", 120000},
+        {11, "Fish", 150000},
+        {12, "Rice", 18000},
+        {13, "Oil", 50000},
+        {14, "Salt", 6000},
+        {15, "Sugar", 10000},
+        {16, "Coffee", 70000},
+        {17, "Tea", 40000},
+        {18, "Chocolate", 30000},
+        {19, "Soap", 15000},
+        {20, "Shampoo", 80000}
 };
 int size_products = products.size();
 int doanhthu = 0;
@@ -57,7 +57,7 @@ Product find_price(int id, int quanitity) {
         }
         else if (products[mid].ID > id) 
             last = mid - 1;
-        else 
+        else
             first = mid + 1;
     }
     return { -1, "False", 0, 0 };
@@ -78,10 +78,6 @@ SC* create_queue() {
     q->front = q->rear = -1;
     q->tongtien = 0;
     return q;
-}
-
-void dispose_queue(SC* q) {
-    free(q);
 }
 
 int is_queue_empty(SC* q) {
@@ -131,6 +127,7 @@ void InHoaDon(SC* sc) {
     }
     cout << string(34, ' ') << "Tong tien: " << sc->tongtien << endl;
     cout << string(60, '-') << endl;
+    free(sc);
 }
 
 void ThongKe() {
@@ -152,7 +149,7 @@ void ThemSPMoi() {
     TVALUE v;
     cout << "Nhap ten san pham: "; cin.ignore(); getline(cin, v.name);
     cout << "Nhap gia san pham: "; cin >> v.price;
-    v.ID = (products[size_products - 1].ID + 1);
+    v.ID = (products.back().ID + 1);
     products.push_back(v);
     ++size_products;
 }
@@ -171,11 +168,12 @@ int Menu() {
 
 int main() {
     Shopping_Cart* sc = create_queue();
-
     while (1) {
         switch (Menu()) 
         {
-        case 1: Chon_SP(sc); continue;
+        case 1: 
+            sc = create_queue();
+            Chon_SP(sc); continue;
         case 2: InHoaDon(sc); continue;
         case 3: ThongKe(); continue;
         case 4: ThemSPMoi(); continue;
